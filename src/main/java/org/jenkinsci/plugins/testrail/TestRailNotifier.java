@@ -142,7 +142,7 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
         List<Testsuite> suites = actualJunitResults.getSuites();
         try {
             for (Testsuite suite: suites) {
-                results.merge(addSuite(suite, null, testCases));
+                results.merge(addSuite(taskListener, suite, null, testCases));
             }
         } catch (Exception e) {
             taskListener.getLogger().println("Failed to create missing Test Suites in TestRail.");
@@ -181,7 +181,7 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
         }
     }
 
-    public Results addSuite(Testsuite suite, String parentId, ExistingTestCases existingCases) throws IOException, TestRailException {
+    public Results addSuite(TaskListener taskListener, Testsuite suite, String parentId, ExistingTestCases existingCases) throws IOException, TestRailException {
         //figure out TR sectionID
         int sectionId;
         try {
@@ -201,7 +201,7 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
 
         if (suite.hasSuites()) {
             for (Testsuite subsuite : suite.getSuites()) {
-                results.merge(addSuite(subsuite, String.valueOf(sectionId), existingCases));
+                results.merge(addSuite(taskListener, subsuite, String.valueOf(sectionId), existingCases));
             }
         }
 
@@ -237,7 +237,9 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
 	                }
 
 	                if (caseStatus != CaseStatus.UNTESTED){
-	                    results.addResult(new Result(caseId, caseStatus, caseComment, caseTime));
+	                    Result result = new Result(caseId, caseStatus, caseComment, caseTime);
+                        taskListener.getLogger().println("Result CaseID: " + result.getCaseId());
+	                    results.addResult(result);
 	                }
 	            }
             }

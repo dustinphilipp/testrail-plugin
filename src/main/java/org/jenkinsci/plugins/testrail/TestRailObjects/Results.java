@@ -40,7 +40,9 @@ public class Results {
     public ArrayList<Integer> getCaseIds() {
         ArrayList<Integer> caseIdList = null;
         for(Result result : results) {
-            caseIdList.add(result.getCaseId());
+            try {
+                caseIdList.add(result.getCaseId());
+            } catch(Exception e){}
         }
         return caseIdList;
     }
