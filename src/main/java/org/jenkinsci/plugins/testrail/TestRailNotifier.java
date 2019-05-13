@@ -43,6 +43,7 @@ import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 public class TestRailNotifier extends Notifier implements SimpleBuildStep {
@@ -155,6 +156,7 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
         int runId = -1;
         TestRailResponse response = null;
         try {
+            taskListener.getLogger().println("caseIds: " + Arrays.toString(results.getCaseIds()));
             runId = testrail.addRun(taskListener, testCases.getProjectId(), testCases.getSuiteId(), milestoneId, runComment, results.getCaseIds());
             response = testrail.addResultsForCases(runId, results);
         } catch (TestRailException e) {

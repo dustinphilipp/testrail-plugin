@@ -37,13 +37,16 @@ public class Results {
     public List<Result> getResults() { return this.results; }
     public void merge(Results other) { this.results.addAll(other.getResults()); }
 
-    public Integer[] getCaseIds() {
-        ArrayList<Integer> caseIdList = null;
+    public int[] getCaseIds() {
+        List<Integer> caseIdList = null;
         for(Result result : results) {
-            caseIdList.add(result.getCaseId());
+            if(result != null)
+                caseIdList.add(result.getCaseId());
         }
-        Integer[] caseIds = new Integer[caseIdList.size()];
-        caseIds = caseIdList.toArray(caseIds);
+        int[] caseIds = new int[caseIdList.size()];
+        for(int i=0;i<caseIdList.size();i++) {
+            caseIds[i] = caseIdList.get(i);
+        }
         return caseIds;
     }
 }

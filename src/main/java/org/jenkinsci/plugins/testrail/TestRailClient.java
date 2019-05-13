@@ -323,13 +323,13 @@ public class TestRailClient {
         return response;
     }
 
-    public int addRun(TaskListener taskListener, int projectId, int suiteId, String milestoneID, String description, Integer[] caseIds)
+    public int addRun(TaskListener taskListener, int projectId, int suiteId, String milestoneID, String description, int[] caseIds)
             throws IOException, TestRailException {
         String payload = new JSONObject()
                 .put("suite_id", suiteId)
                 .put("description", description)
-                .put("include_all", false)
-                .put("case_ids", Arrays.toString(caseIds))
+                .put("include_all", Boolean.FALSE)
+                .put("case_ids", caseIds)
                 .put("milestone_id", milestoneID).toString();
         taskListener.getLogger().println("Payload: " + payload);
 
