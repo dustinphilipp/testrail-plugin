@@ -55,7 +55,7 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
     private String testrailMilestone;
     private boolean enableMilestone;
     private boolean createNewTestcases;
-    private ArrayList<Integer> caseIdList;
+    private ArrayList<Integer> caseIdList = new ArrayList<Integer>();
 
     // Fields in config.jelly must match the parameter names in the "DataBoundConstructor"
     @DataBoundConstructor
