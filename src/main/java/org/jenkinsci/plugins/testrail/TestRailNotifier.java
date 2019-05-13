@@ -43,6 +43,7 @@ import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -54,6 +55,7 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
     private String testrailMilestone;
     private boolean enableMilestone;
     private boolean createNewTestcases;
+    private ArrayList<Integer> caseIdList;
 
     // Fields in config.jelly must match the parameter names in the "DataBoundConstructor"
     @DataBoundConstructor
@@ -142,7 +144,7 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
         List<Testsuite> suites = actualJunitResults.getSuites();
         try {
             for (Testsuite suite: suites) {
-                results.merge(addSuite(taskListener, suite, null, testCases));
+                results.merge(addSuite(suite, null, testCases));
             }
         } catch (Exception e) {
             taskListener.getLogger().println("Failed to create missing Test Suites in TestRail.");
@@ -156,11 +158,7 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
         int runId = -1;
         TestRailResponse response = null;
         try {
-            for(Result result : results.getResults()) {
-                taskListener.getLogger().println("results: " + result.getCaseId());
-            }
-            taskListener.getLogger().println("caseIds: " + results.getCaseIds().toString());
-            runId = testrail.addRun(taskListener, testCases.getProjectId(), testCases.getSuiteId(), milestoneId, runComment, results.getCaseIds());
+            runId = testrail.addRun(testCases.getProjectId(), testCases.getSuiteId(), milestoneId, runComment, caseIdList);
             response = testrail.addResultsForCases(runId, results);
         } catch (TestRailException e) {
             taskListener.getLogger().println("Error pushing results to TestRail");
@@ -176,15 +174,15 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
             taskListener.getLogger().println("status: " + response.getStatus());
             taskListener.getLogger().println("body :\n" + response.getBody());
         }
-        try {
+        /*try {
             testrail.closeRun(runId);
         } catch (Exception e) {
             taskListener.getLogger().println("Failed to close test run in TestRail.");
             taskListener.getLogger().println("EXCEPTION: " + e.getMessage());
-        }
+        }*/
     }
 
-    public Results addSuite(TaskListener taskListener, Testsuite suite, String parentId, ExistingTestCases existingCases) throws IOException, TestRailException {
+    public Results addSuite(Testsuite suite, String parentId, ExistingTestCases existingCases) throws IOException, TestRailException {
         //figure out TR sectionID
         int sectionId;
         try {
@@ -204,7 +202,7 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
 
         if (suite.hasSuites()) {
             for (Testsuite subsuite : suite.getSuites()) {
-                results.merge(addSuite(taskListener, subsuite, String.valueOf(sectionId), existingCases));
+                results.merge(addSuite(subsuite, String.valueOf(sectionId), existingCases));
             }
         }
 
@@ -241,7 +239,7 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
 
 	                if (caseStatus != CaseStatus.UNTESTED){
 	                    Result result = new Result(caseId, caseStatus, caseComment, caseTime);
-                        taskListener.getLogger().println("Result CaseID: " + result.getCaseId());
+                        caseIdList.add(caseId);
 	                    results.addResult(result);
 	                }
 	            }

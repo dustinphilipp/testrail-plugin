@@ -36,14 +36,4 @@ public class Results {
     public void addResult(Result result) { this.results.add(result); }
     public List<Result> getResults() { return this.results; }
     public void merge(Results other) { this.results.addAll(other.getResults()); }
-
-    public ArrayList<Integer> getCaseIds() {
-        ArrayList<Integer> caseIdList = null;
-        for(Result result : getResults()) {
-            try {
-                caseIdList.add(result.getCaseId());
-            } catch(Exception e){}
-        }
-        return caseIdList;
-    }
 }

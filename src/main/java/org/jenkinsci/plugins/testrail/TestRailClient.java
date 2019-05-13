@@ -324,7 +324,7 @@ public class TestRailClient {
         return response;
     }
 
-    public int addRun(TaskListener taskListener, int projectId, int suiteId, String milestoneID, String description, ArrayList<Integer> caseIds)
+    public int addRun(int projectId, int suiteId, String milestoneID, String description, ArrayList<Integer> caseIds)
             throws IOException, TestRailException {
         String payload = new JSONObject()
                 .put("suite_id", suiteId)
@@ -332,7 +332,6 @@ public class TestRailClient {
                 .put("include_all", Boolean.FALSE)
                 .put("case_ids", caseIds.toArray())
                 .put("milestone_id", milestoneID).toString();
-        taskListener.getLogger().println("Payload: " + payload);
 
         String body = httpPost("index.php?/api/v2/add_run/" + projectId, payload).getBody();
         return new JSONObject(body).getInt("id");
