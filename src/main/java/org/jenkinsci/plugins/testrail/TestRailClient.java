@@ -39,6 +39,7 @@ import javax.xml.ws.http.HTTPException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.InterruptedException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import static org.jenkinsci.plugins.testrail.Utils.*;
@@ -323,13 +324,13 @@ public class TestRailClient {
         return response;
     }
 
-    public int addRun(TaskListener taskListener, int projectId, int suiteId, String milestoneID, String description, int[] caseIds)
+    public int addRun(TaskListener taskListener, int projectId, int suiteId, String milestoneID, String description, ArrayList<Integer> caseIds)
             throws IOException, TestRailException {
         String payload = new JSONObject()
                 .put("suite_id", suiteId)
                 .put("description", description)
                 .put("include_all", Boolean.FALSE)
-                .put("case_ids", caseIds)
+                .put("case_ids", caseIds.toArray())
                 .put("milestone_id", milestoneID).toString();
         taskListener.getLogger().println("Payload: " + payload);
 
