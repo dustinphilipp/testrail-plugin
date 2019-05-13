@@ -327,7 +327,7 @@ public class TestRailClient {
                 .put("suite_id", suiteId)
                 .put("description", description)
                 .put("include_all", false)
-                .put("case_ids", caseIds)
+                .put("case_ids", (new JSONArray(caseIds)))
                 .put("milestone_id", milestoneID).toString();
         String body = httpPost("index.php?/api/v2/add_run/" + projectId, payload).getBody();
         return new JSONObject(body).getInt("id");
