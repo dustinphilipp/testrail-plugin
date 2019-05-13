@@ -18,6 +18,7 @@
  */
 package org.jenkinsci.plugins.testrail;
 
+import hudson.model.TaskListener;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
@@ -38,6 +39,7 @@ import javax.xml.ws.http.HTTPException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.InterruptedException;
+import java.util.Arrays;
 import java.util.List;
 import static org.jenkinsci.plugins.testrail.Utils.*;
 /**
@@ -321,14 +323,16 @@ public class TestRailClient {
         return response;
     }
 
-    public int addRun(int projectId, int suiteId, String milestoneID, String description, Integer[] caseIds)
+    public int addRun(TaskListener taskListener, int projectId, int suiteId, String milestoneID, String description, Integer[] caseIds)
             throws IOException, TestRailException {
         String payload = new JSONObject()
                 .put("suite_id", suiteId)
                 .put("description", description)
                 .put("include_all", false)
-                .put("case_ids", (new JSONArray(caseIds)))
+                .put("case_ids", Arrays.toString(caseIds))
                 .put("milestone_id", milestoneID).toString();
+        taskListener.getLogger().println("Payload: " + payload);
+
         String body = httpPost("index.php?/api/v2/add_run/" + projectId, payload).getBody();
         return new JSONObject(body).getInt("id");
     }
