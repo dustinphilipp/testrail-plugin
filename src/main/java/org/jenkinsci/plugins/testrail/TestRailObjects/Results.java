@@ -36,4 +36,14 @@ public class Results {
     public void addResult(Result result) { this.results.add(result); }
     public List<Result> getResults() { return this.results; }
     public void merge(Results other) { this.results.addAll(other.getResults()); }
+
+    public Integer[] getCaseIds() {
+        ArrayList<Integer> caseIdList = null;
+        for(Result result : results) {
+            caseIdList.add(result.getCaseId());
+        }
+        Integer[] caseIds = new Integer[caseIdList.size()];
+        caseIds = caseIdList.toArray(caseIds);
+        return caseIds;
+    }
 }

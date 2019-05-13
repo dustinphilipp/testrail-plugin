@@ -321,9 +321,14 @@ public class TestRailClient {
         return response;
     }
 
-    public int addRun(int projectId, int suiteId, String milestoneID, String description)
+    public int addRun(int projectId, int suiteId, String milestoneID, String description, Integer[] caseIds)
             throws IOException, TestRailException {
-        String payload = new JSONObject().put("suite_id", suiteId).put("description", description).put("milestone_id", milestoneID).toString();
+        String payload = new JSONObject()
+                .put("suite_id", suiteId)
+                .put("description", description)
+                .put("include_all", false)
+                .put("case_ids", caseIds)
+                .put("milestone_id", milestoneID).toString();
         String body = httpPost("index.php?/api/v2/add_run/" + projectId, payload).getBody();
         return new JSONObject(body).getInt("id");
     }
