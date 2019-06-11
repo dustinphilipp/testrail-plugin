@@ -326,7 +326,16 @@ public class TestRailClient {
 
     public int addRun(int projectId, int suiteId, String milestoneID, String description, ArrayList<Integer> caseIds)
             throws IOException, TestRailException {
+
+        /*the jobpath in the description contains our Job / Testrun name in the jenkins job path:
+            file:/Users/host/.jenkins/workspace/x/y/JOB_NAME/
+            We want to extract the last partm the JOB_NAME
+        */
+        String[] descriptionSplit = description.split("/");
+        String name = descriptionSplit[descriptionSplit.length-1];
+
         String payload = new JSONObject()
+                .put("name", name)
                 .put("suite_id", suiteId)
                 .put("description", description)
                 .put("include_all", Boolean.FALSE)
