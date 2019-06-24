@@ -237,11 +237,9 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
 	                    caseStatus = CaseStatus.PASSED;
 	                }
 
-	                if (caseStatus != CaseStatus.UNTESTED){
-	                    Result result = new Result(caseId, caseStatus, caseComment, caseTime);
-                        caseIdList.add(caseId);
-	                    results.addResult(result);
-	                }
+                    Result result = new Result(caseId, caseStatus, caseComment, caseTime);
+                    caseIdList.add(caseId);
+                    results.addResult(result);
 	            }
             }
         }
