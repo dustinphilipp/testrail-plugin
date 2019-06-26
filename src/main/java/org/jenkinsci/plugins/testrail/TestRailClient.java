@@ -316,8 +316,8 @@ public class TestRailClient {
             Result r = results.getResults().get(i);
             if (!r.getStatus().equals(CaseStatus.UNTESTED)){
                 o.put("case_id", r.getCaseId()).put("status_id", r.getStatus().getValue()).put("comment", r.getComment()).put("elapsed", r.getElapsedTimeString());
+                a.put(o);
             }
-            a.put(o);
         }
 
         String payload = new JSONObject().put("results", a).toString();
