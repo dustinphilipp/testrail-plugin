@@ -75,6 +75,12 @@ public class ExistingTestCases {
     }
 
     public int getCaseId(String sectionName, String caseName) throws ElementNotFoundException {
+        try {
+            String[] caseNameSplit = caseName.split("_");
+            String caseId = caseNameSplit[caseNameSplit.length - 1];
+            return Integer.parseInt(caseId);
+        } catch(Exception e){}
+
         Iterator<Case> caseIterator = cases.iterator();
         while (caseIterator.hasNext()) {
             Case testcase = caseIterator.next();
